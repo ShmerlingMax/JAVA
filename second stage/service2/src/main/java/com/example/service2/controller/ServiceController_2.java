@@ -1,6 +1,8 @@
 package com.example.service2.controller;
 
 import com.example.service2.service.Service2;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -9,6 +11,7 @@ import java.io.IOException;
 @RequestMapping("/service2")
 public class ServiceController_2
 {
+    final static String NOT_FOUND = "The schedule file with this name was not found!";
     @GetMapping("/document")
     public static String getDocument()
     {
@@ -16,28 +19,28 @@ public class ServiceController_2
     }
 
     @GetMapping(value = "/schedule")
-    public static String getScheduleRequestParam(@RequestParam("name") String name)
+    public static ResponseEntity<String> getScheduleRequestParam(@RequestParam("name") String name)
     {
         try
         {
-            return Service2.getSchedule(name);
+            return new ResponseEntity<>(Service2.getSchedule(name), HttpStatus.OK);
         }
         catch (IOException e)
         {
-            return "The schedule file with this name was not found!";
+            return new ResponseEntity<>(NOT_FOUND, HttpStatus.BAD_REQUEST);
         }
     }
 
     @GetMapping(value = "/schedule/{name}")
-    public static String getSchedulePathVariable(@PathVariable("name") String name)
+    public static ResponseEntity<String> getSchedulePathVariable(@PathVariable("name") String name)
     {
         try
         {
-            return Service2.getSchedule(name);
+            return new ResponseEntity<>(Service2.getSchedule(name), HttpStatus.OK);
         }
         catch (IOException e)
         {
-            return "The schedule file with this name was not found!";
+            return new ResponseEntity<>(NOT_FOUND, HttpStatus.BAD_REQUEST);
         }
     }
 

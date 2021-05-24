@@ -1,7 +1,6 @@
 package com.example.service2.service;
 
 import com.example.service2.entity.Ship;
-import com.example.service2.entity.Statistics;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,7 +9,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.File;
-import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,9 +18,9 @@ import java.util.Scanner;
 
 public class Service2
 {
-    final static int weightLoadingCapacity = 1000;
-    final static int containerLoadingCapacity = 125;
-    final static int unloadingTime = 60;
+    final static int WEIGHT_LOADING_CAPACITY = 1000;
+    final static int CONTAINER_LOADING_CAPACITY = 125;
+    final static int UNLOADING_TIME = 60;
     public static String generateScheduleDocument ()
     {
         RestTemplate restTemplate = new RestTemplate();
@@ -30,10 +28,12 @@ public class Service2
         ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
         String json = responseEntity.getBody();
         ObjectMapper mapper = new ObjectMapper();
-        ArrayList<Ship> ships = null;
+        ArrayList<Ship> ships = new ArrayList<>();
         try
         {
-            ships = mapper.readValue(json, new TypeReference<ArrayList<Ship>>(){});
+            ships = mapper.readValue(json, new TypeReference<>()
+            {
+            });
         }
         catch (JsonProcessingException e)
         {
@@ -103,10 +103,10 @@ public class Service2
                 }
                 if (type != 2)
                 {
-                    ships.add(new Ship(name, day, hours, minutes1, type, quantity, weightLoadingCapacity, unloadingTime));
+                    ships.add(new Ship(name, day, hours, minutes1, type, quantity, WEIGHT_LOADING_CAPACITY, UNLOADING_TIME));
                 } else
                 {
-                    ships.add(new Ship(name, day, hours, minutes1, type, quantity, containerLoadingCapacity, unloadingTime));
+                    ships.add(new Ship(name, day, hours, minutes1, type, quantity, CONTAINER_LOADING_CAPACITY, UNLOADING_TIME));
                 }
                 count--;
                 if (count == 0)

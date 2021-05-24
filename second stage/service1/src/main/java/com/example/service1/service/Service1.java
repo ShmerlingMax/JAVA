@@ -10,18 +10,18 @@ import java.util.Random;
 
 public class Service1
 {
-    final static int days = 30, minutes = 1440, maximumNumberOfShips = 101, maximumLoadWeight = 5000,
-            maximumNumberOfContainers = 625, weightLoadingCapacity = 1000, containerLoadingCapacity = 125, unloadingTime = 60;
+    final static int DAYS = 30, MINUTES = 1440, MAXIMUM_NUMBER_OF_SHIPS = 101, MAXIMUM_LOAD_WEIGHT = 5000,
+            MAXIMUM_NUMBER_OF_CONTAINERS = 625, WEIGHT_LOADING_CAPACITY = 1000, CONTAINER_LOADING_CAPACITY = 125, UNLOADING_TIME = 60;
     public static String generateSchedule()
     {
         Random rnd = new Random();
         ArrayList<Ship> ships = new ArrayList<>();
         System.out.printf("%65s%n", "Сгенерированное расписание");
         System.out.println("Название     Запланированое время прибытия   Тип груза   Вес/Количество    Планируемый срок стоянки");
-        for (int i = 0; i < rnd.nextInt(maximumNumberOfShips) + 300; i++)
+        for (int i = 0; i < rnd.nextInt(MAXIMUM_NUMBER_OF_SHIPS) + 300; i++)
         {
-            ships.add(new Ship(days, minutes, maximumLoadWeight, maximumNumberOfContainers, weightLoadingCapacity,
-                    containerLoadingCapacity, unloadingTime, i));
+            ships.add(new Ship(DAYS, MINUTES, MAXIMUM_LOAD_WEIGHT, MAXIMUM_NUMBER_OF_CONTAINERS, WEIGHT_LOADING_CAPACITY,
+                    CONTAINER_LOADING_CAPACITY, UNLOADING_TIME, i));
             ships.get(i).print();
         }
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();

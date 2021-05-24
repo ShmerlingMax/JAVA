@@ -4,7 +4,6 @@ import com.example.service3.entity.Crane;
 import com.example.service3.entity.Ship;
 import com.example.service3.entity.Statistics;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 import org.springframework.http.HttpEntity;
@@ -14,13 +13,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.ArrayDeque;
+import java.util.Arrays;
+import java.util.NoSuchElementException;
+import java.util.Vector;
 
 public class Service3
 {
-    final static int weightLoadingCapacity = 1000;
-    final static int containerLoadingCapacity = 125;
-    final static int unloadingTime = 60;
+    final static int WEIGHT_LOADING_CAPACITY = 1000;
+    final static int CONTAINER_LOADING_CAPACITY = 125;
+    final static int UNLOADING_TIME = 60;
     private static Statistics statistics = new Statistics();
     public static int calculatePenalty(Vector<Ship> ships)
     {
@@ -188,7 +190,7 @@ public class Service3
         }
         Thread t1 = new Thread(()->
         {
-            Crane crane = new Crane(0, weightLoadingCapacity, unloadingTime);
+            Crane crane = new Crane(0, WEIGHT_LOADING_CAPACITY, UNLOADING_TIME);
             for(Ship ship : bulkCargo)
             {
                 crane.unload(ship);
@@ -196,7 +198,7 @@ public class Service3
         });
         Thread t2 = new Thread(()->
         {
-            Crane crane = new Crane(1, weightLoadingCapacity, unloadingTime);
+            Crane crane = new Crane(1, WEIGHT_LOADING_CAPACITY, UNLOADING_TIME);
             for(Ship ship : liquidCargo)
             {
                 crane.unload(ship);
@@ -204,7 +206,7 @@ public class Service3
         });
         Thread t3 = new Thread(()->
         {
-            Crane crane = new Crane(2, containerLoadingCapacity, unloadingTime);
+            Crane crane = new Crane(2, CONTAINER_LOADING_CAPACITY, UNLOADING_TIME);
             for(Ship ship : containerCargo)
             {
                 crane.unload(ship);
@@ -221,9 +223,9 @@ public class Service3
         statistics.count2_ = 1;
         statistics.count3_ = 1;
         statistics.print();
-        statistics.count1_ = simulation(bulkCargo, 0, weightLoadingCapacity, unloadingTime);
-        statistics.count2_ = simulation(liquidCargo, 1, weightLoadingCapacity, unloadingTime);
-        statistics.count3_ = simulation(containerCargo, 2, containerLoadingCapacity, unloadingTime);
+        statistics.count1_ = simulation(bulkCargo, 0, WEIGHT_LOADING_CAPACITY, UNLOADING_TIME);
+        statistics.count2_ = simulation(liquidCargo, 1, WEIGHT_LOADING_CAPACITY, UNLOADING_TIME);
+        statistics.count3_ = simulation(containerCargo, 2, CONTAINER_LOADING_CAPACITY, UNLOADING_TIME);
         statistics.calculate(bulkCargo, liquidCargo, containerCargo);
         statistics.print();
 
