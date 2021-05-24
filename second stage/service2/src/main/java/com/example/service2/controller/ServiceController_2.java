@@ -4,7 +4,9 @@ import com.example.service2.service.Service2;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
+import java.io.File;
 import java.io.IOException;
 
 @RestController
@@ -13,21 +15,22 @@ public class ServiceController_2
 {
     final static String NOT_FOUND = "The schedule file with this name was not found!";
     @GetMapping("/document")
-    public static String getDocument()
+    public static File getDocument()
     {
-        return Service2.generateScheduleDocument();
+        Service2.generateScheduleDocument();
+        return new File("schedules/ships");
     }
 
     @GetMapping(value = "/schedule")
-    public static ResponseEntity<String> getScheduleRequestParam(@RequestParam("name") String name)
+    public static String getScheduleRequestParam(@RequestParam("name") String name)
     {
         try
         {
-            return new ResponseEntity<>(Service2.getSchedule(name), HttpStatus.OK);
+            return Service2.getSchedule(name);
         }
         catch (IOException e)
         {
-            return new ResponseEntity<>(NOT_FOUND, HttpStatus.BAD_REQUEST);
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, NOT_FOUND);
         }
     }
 

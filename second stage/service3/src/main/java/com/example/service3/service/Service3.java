@@ -12,7 +12,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
+import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayDeque;
 import java.util.Arrays;
 import java.util.NoSuchElementException;
@@ -153,13 +156,13 @@ public class Service3
     {
         RestTemplate restTemplate = new RestTemplate();
         String url = "http://localhost:8082/service2/document";
-        ResponseEntity<String> responseEntity = restTemplate.getForEntity(url, String.class);
-        String json = responseEntity.getBody();
+        ResponseEntity<File> responseEntity = restTemplate.getForEntity(url, File.class);
+        File file = responseEntity.getBody();
         ObjectMapper mapper = new ObjectMapper();
         Ship[] ships = null;
         try
         {
-            ships = mapper.readValue(json, Ship[].class);
+            ships = mapper.readValue(file, Ship[].class);
         }
         catch (JsonProcessingException e)
         {
@@ -233,6 +236,7 @@ public class Service3
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         ObjectWriter objectWriter = new ObjectMapper().writer().withDefaultPrettyPrinter();
+        String json = null;
         try
         {
             json = objectWriter.writeValueAsString(statistics);
